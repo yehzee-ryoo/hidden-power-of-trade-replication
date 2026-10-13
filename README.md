@@ -8,7 +8,7 @@ Replication code and data for:
 - GitHub: [TODO: URL]
 - Contact: Yehzee Ryoo (yehzee.ryoo@wisc.edu)
 
-Running `code_analyze/master-run-all.R` rebuilds every figure and table in the paper from the raw data. The one exception is Figure 2 (the DAG), which was drawn by hand and is not produced by code.
+Running `code_analyze/master-run-all.R` rebuilds every figure, table, and counterfactual number reported in the paper (main text and appendix) from the raw data, and only those. The one exception is Figure 2 (the DAG), which was drawn by hand and is not produced by code. Intermediate files (cleaned data in `data/`, model estimates as `.rds` files in `output/estimates/`) are also saved, because the figures and tables are built from them.
 
 ---
 
@@ -31,10 +31,15 @@ Running `code_analyze/master-run-all.R` rebuilds every figure and table in the p
 │   ├── 2-estimate-models.R         # Network mediation models (NDE/NIE)
 │   ├── 3-plots.R
 │   ├── 4-tables.R
-│   └── 5-rnr-resolution-types.R    # Resolution-type table, category exclusion
+│   └── 5-resolution-types.R    # Resolution-type table, category exclusion
 ├── raw data/                   # Raw inputs (see Section 2)
 ├── data/                       # Created by the code (intermediate data)
-└── output/                     # Created by the code (figures, tables, estimates)
+└── output/                     # Created by the code
+    ├── plots/                      # Main-text figures
+    │   └── appendix/               # Appendix figures
+    ├── tables/                     # Main-text tables
+    │   └── appendix/               # Appendix tables
+    └── estimates/                  # Model estimates (.rds) the figures and tables are built from
 ```
 
 The `code_cleaning/` and `code_analyze/` scripts only define functions. `master-run-all.R` loads them and runs the pipeline in order. Do not rename the folders: the scripts use relative paths such as `../raw data/`.
@@ -50,7 +55,7 @@ Put all of these files in `raw data/` under the file names shown.
 | `un_votes.rds`, `un_roll_calls.rds`, `un_roll_call_issues.rds` | UNGA roll-call votes, resolution information (including `importantvote`), and issue codes | R package `unvotes` (https://github.com/dgrtwo/unvotes), built on Voeten's UNGA Voting Data (https://doi.org/10.7910/DVN/LEJUQZ) | `unvotes` 0.3.0; saved March 12, 2026 |
 | `vdem.rds` | V-Dem country-year data (`v2x_polyarchy`, `v2x_civlib`) | R package `vdemdata` (https://github.com/vdeminstitute/vdemdata) | V-Dem v15; saved March 12, 2026 |
 | `gdp.pop.rds` | GDP (`NY.GDP.MKTP.CD`) and population (`SP.POP.TOTL`), 1995–2024 | World Bank WDI, via R package `WDI` | `WDI` 2.7.9; saved March 12, 2026 |
-| `state_year_v4_CORRECTED.dta` | IGO membership, country-year format (WTO, EU, OIC used), 1816–2023 | Correlates of War IGO data, version 4 (corrected). Provided directly by Jon Pevehouse | Received January 9, 2026 |
+| `state_year_v4_extract.dta` | IGO membership (WTO, EU, OIC), country-year format, 1998–2016 | Correlates of War IGO data, version 4 (corrected), provided directly by the authors. Extracted from the full file (`state_year_v4_CORRECTED.dta`, not included): only `ccode`, `state`, `year`, `WTO`, `EU`, `OIC` for 1998–2016, values unchanged | Received January 9, 2026 |
 | `ucdp_dyadic_v25_1.csv` | Armed conflict dyads | UCDP Dyadic Dataset v25.1 (https://ucdp.uu.se/downloads/#dyadic) | v25.1; downloaded March 12, 2026 |
 | `Trade-cepii-HS96/WTFC_HS96_Y{2000..2018}_V202104.csv` (19 files, ~7.5 GB) | Bilateral trade flows, HS96 product level | CEPII World Trade Flows Characterization (WTFC) | V202104 |
 | `Trade-cepii-HS96/WTFC_country_codes_V202104.csv` | CEPII country code list | CEPII WTFC | V202104 |
@@ -65,7 +70,7 @@ Put all of these files in `raw data/` under the file names shown.
 **Changes made in code (raw files are never edited).**
 
 - *UN votes:* Yugoslavia after 1995 is recoded as Serbia (COW code 345). Votes are coded `vote_numeric` (yes = 1, abstain = 0.5, no = 0) and `vote_binary` (yes = 1, otherwise 0).
-- *IGO:* WTO observer status (3) is coded as non-member (0). The UK's EU membership is set to 0 from 2021 on. Syria's OIC membership is set to 0 for 2012–2024 because of its suspension.
+- *IGO:* WTO observer status (3) is coded as non-member (0). Syria's OIC membership is set to 0 for 2012–2024 because of its suspension.
 - *UCDP:* Type 1/3 conflicts count as intrastate and type 2 as interstate. Type 1 (extrasystemic) has no cases after 1974, so it does not affect the 2000–2018 analysis. For type 4 conflicts, the host government counts as intrastate and foreign interveners as interstate. US vs. al-Qaeda (conflict 418) counts as interstate for the US. Conflicts are counted once per `conflict_id` per country-year.
 - *CEPII:* Antigua & Barbuda's ISO3 code is corrected from `ATA` to `ATG` in the country code file.
 
@@ -131,9 +136,7 @@ The script creates `data/` and `output/` if they don't exist. To start from scra
 
 - Rank selection runs in parallel on 8 cores (`n_cores = 8` in `master-run-all.R`) and takes about 20 minutes. Lower `n_cores` if your machine has fewer cores or runs out of memory.
 - Building the trade graphs loads all 19 CEPII files (~7.5 GB) at once, so it needs a lot of memory.
-- Total run time: [TODO: fill in after the full run, with machine specs (CPU, RAM)].
-
-**Numbers reported in the text.** The counterfactual results (Moldova adopting Japan's or Belgium's trade embeddings, Syria adopting Qatar's; Saudi Arabia and Nicaragua adopting Canada's democracy score) are printed to the console and saved in `output/counterfactual_nie_scenarios.rds` and `output/counterfactual_nde_scenarios.rds`.
+**Numbers reported in the text.** The counterfactual results (Moldova adopting Japan's trade embeddings and Syria adopting Qatar's; Saudi Arabia adopting Canada's democracy score and Nicaragua adopting Cyprus's) are printed to the console and saved in `output/estimates/counterfactual_nie_scenarios.rds` and `output/estimates/counterfactual_nde_scenarios.rds`. They use trade year 2015, i.e., democracy measured in 2014.
 
 ---
 
@@ -143,33 +146,33 @@ All paths are relative to `output/`.
 
 ### Figures
 
-| Paper | Description | Output file |
-|---|---|---|
-| Figure 1 | Trade network, 2014 | `plots/trade_network/trade_2014_top5_exp.pdf` |
-| Figure 2 | DAG | Drawn by hand; not produced by code |
-| Figure 3 | NDE/NIE over time, main model | `plots/main_complete/time_trend_NDE_NIE_complete.png` |
-| Figure 4 | PCA of trade networks | `plots/pca/PCA_allyears_complete_lp1.pdf` |
-| Figure 5 | Distribution of `v2x_polyarchy` | `plots/appendix/vdem_polyarchy_distribution.pdf` |
-| Figure 6 | NDE/NIE, import network | `plots/import_complete/time_trend_NDE_NIE_import_complete.png` |
-| Figure 7 | NDE/NIE, binary DV | `plots/alt_dv_complete/time_trend_NDE_NIE_alt_dv_complete.png` |
-| Figure 8 | NDE/NIE, important-vote control | `plots/impvote_controls_complete/time_trend_NDE_NIE_impvote_controls_complete.png` |
-| Figure 9 | NDE/NIE, politicized resolutions excluded | `plots/subset_full_eliminated/time_trend_NDE_NIE_subset_full_eliminated.png` |
-| Figure 10 | Sensitivity to rank (a–e) | `plots/main_complete/sensitivity/sensitivity_{2000,2005,2010,2015,2018}.png` |
-| Figure 11 | PC2 vs. export / import, 2014 | `plots/appendix/pc2_corr_export/pc2_export_log_2014.pdf`, `plots/appendix/pc2_corr_import/pc2_import_log_2014.pdf` |
+| Paper | Section | Description | Output file |
+|---|---|---|---|
+| Figure 1 | Main text | Trade network, 2014 | `plots/trade_2014_top5_exp.pdf` |
+| Figure 2 | Main text | DAG | Drawn by hand; not produced by code |
+| Figure 3 | Main text | NDE/NIE over time, main model | `plots/time_trend_NDE_NIE_complete.png` |
+| Figure 4 | Main text | PCA of trade networks | `plots/PCA_allyears_complete_lp1.pdf` |
+| Figure 5 | Appendix | Distribution of `v2x_polyarchy` | `plots/appendix/vdem_polyarchy_distribution.pdf` |
+| Figure 6 | Appendix | NDE/NIE, import network | `plots/appendix/time_trend_NDE_NIE_import_complete.png` |
+| Figure 7 | Appendix | NDE/NIE, binary DV | `plots/appendix/time_trend_NDE_NIE_alt_dv_complete.png` |
+| Figure 8 | Appendix | NDE/NIE, important-vote control | `plots/appendix/time_trend_NDE_NIE_impvote_controls_complete.png` |
+| Figure 9 | Appendix | NDE/NIE, politicized resolutions excluded | `plots/appendix/time_trend_NDE_NIE_subset_full_eliminated.png` |
+| Figure 10 | Appendix | Sensitivity to rank (a–e) | `plots/appendix/sensitivity_{2000,2005,2010,2015,2018}.png` |
+| Figure 11 | Appendix | PC2 vs. export / import, 2014 | `plots/appendix/pc2_export_log_2014.pdf`, `plots/appendix/pc2_import_log_2014.pdf` |
 
 ### Tables
 
-| Paper | Description | Output file |
-|---|---|---|
-| Table 1 | Example resolutions | `tables/resolution_examples.tex` |
-| Table 2 | Summary statistics | `tables/summary_stats.tex` |
-| Table 3 | Year structure | `tables/lagged_years_summary.tex` |
-| Table 4 | Resolution types | `tables/resolution_types.tex` |
-| Table 5 | Robustness checks | `tables/regression_robustness_compact.tex` |
-| Tables 6–7 | Excluding each resolution category | `tables/regression_category_exclusion.tex` |
-| Table 8 | PC2 regressed on trade, 2014 | `tables/pc2_trade_regression.tex` |
+| Paper | Section | Description | Output file |
+|---|---|---|---|
+| Table 1 | Main text | Example resolutions | `tables/resolution_examples.tex` |
+| Table 2 | Appendix | Summary statistics | `tables/appendix/summary_stats.tex` |
+| Table 3 | Appendix | Year structure | `tables/appendix/lagged_years_summary.tex` |
+| Table 4 | Appendix | Resolution types | `tables/appendix/resolution_types.tex` |
+| Table 5 | Appendix | Robustness checks | `tables/appendix/regression_robustness_compact.tex` |
+| Tables 6–7 | Appendix | Excluding each resolution category | `tables/appendix/regression_category_exclusion.tex` |
+| Table 8 | Appendix | PC2 regressed on trade, 2014 | `tables/appendix/pc2_trade_regression.tex` |
 
-The caption of Table 5 was edited in the manuscript, so its wording differs from the caption written to the `.tex` file. The estimates are the same.
+**Formatting differs from the published version.** All estimates and numbers produced by the code are identical to those in the paper. Some captions and table formatting were edited by hand for publication, so the `.tex` files written by the code may differ from the published tables in wording and layout (but not in numbers). In the figures, the positions of country labels, and the node layout of the trade-network plot (Figure 1), are not fully reproducible and may differ from the published figures; the underlying data are the same.
 
 ---
 
