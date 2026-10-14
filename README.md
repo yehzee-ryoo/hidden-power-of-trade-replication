@@ -8,7 +8,12 @@ Replication code and data for:
 - GitHub: https://github.com/yehzee-ryoo/hidden-power-of-trade-replication
 - Contact: Yehzee Ryoo (yehzee.ryoo@wisc.edu)
 
-Running `code_analyze/master-run-all.R` rebuilds every figure, table, and counterfactual number reported in the paper (main text and appendix) from the raw data, and only those. The one exception is Figure 2 (the DAG), which was drawn by hand and is not produced by code. Intermediate files (cleaned data in `data/`, model estimates as `.rds` files in `output/estimates/`) are also saved, because the figures and tables are built from them.
+**How to cite.** If you use this code or data, please cite the article and the replication data:
+
+- Ryoo, Yehzee, Adeline Lo, and Keith Levin. 2026. "The Hidden Power of Trade: Trade Networks as Mediators for Democracy on Human Rights Voting." *Network Science*.
+- Ryoo, Yehzee, Adeline Lo, and Keith Levin. 2026. "Replication Data for: The Hidden Power of Trade." Harvard Dataverse. https://doi.org/10.7910/DVN/K5SIZI
+
+Running `code_analyze/master-run-all.R` rebuilds every figure, table, and counterfactual number reported in the paper (main text and appendix) from the raw data. The one exception is Figure 2 (the DAG), which was drawn by hand and is not produced by code. Intermediate files (cleaned data in `data/`, model estimates as `.rds` files in `output/estimates/`) are also saved, which we use to build the figures and tables.
 
 ---
 
@@ -18,7 +23,6 @@ Running `code_analyze/master-run-all.R` rebuilds every figure, table, and counte
 .
 ├── README.md
 ├── code_cleaning/              # Builds the analysis data from raw data
-│   ├── sanity_check.R
 │   ├── 1-DV-cleaning.R             # UNGA human-rights votes (DV), country list
 │   ├── 2-IV-cleaning.R             # V-Dem, WDI, IGO, human rights index, UCDP
 │   ├── 3-DV-IV-merge-polish.R      # Merge and apply time lags
@@ -60,7 +64,7 @@ Put all of these files in `raw data/` under the file names shown.
 | `Trade-cepii-HS96/WTFC_HS96_Y{2000..2018}_V202104.csv` (19 files, ~7.5 GB) | Bilateral trade flows, HS96 product level | CEPII World Trade Flows Characterization (WTFC) | V202104 |
 | `Trade-cepii-HS96/WTFC_country_codes_V202104.csv` | CEPII country code list | CEPII WTFC | V202104 |
 
-**Where to get the files.**
+**Where to get the raw data files.**
 
 - All files except the 19 CEPII trade files are in this GitHub repository and on Dataverse.
 - The CEPII trade files are too large for GitHub. Download them from the Dataverse record above and put them in `raw data/Trade-cepii-HS96/`.
@@ -128,7 +132,11 @@ The script creates `data/` and `output/` if they don't exist. To start from scra
 
 - Rank selection runs in parallel on 8 cores (`n_cores = 8` in `master-run-all.R`) and takes about 20 minutes. Lower `n_cores` if your machine has fewer cores or runs out of memory.
 - Building the trade graphs loads all 19 CEPII files (~7.5 GB) at once, so it needs a lot of memory.
-**Numbers reported in the text.** The counterfactual results (Moldova adopting Japan's trade embeddings and Syria adopting Qatar's; Saudi Arabia adopting Canada's democracy score and Nicaragua adopting Cyprus's) are printed to the console and saved in `output/estimates/counterfactual_nie_scenarios.rds` and `output/estimates/counterfactual_nde_scenarios.rds`. They use trade year 2015, i.e., democracy measured in 2014.
+
+
+**Numbers reported in the text.** 
+
+- The counterfactual results (Moldova adopting Japan's trade embeddings and Syria adopting Qatar's; Saudi Arabia adopting Canada's democracy score and Nicaragua adopting Cyprus's) are printed to the console and saved in `output/estimates/counterfactual_nie_scenarios.rds` and `output/estimates/counterfactual_nde_scenarios.rds`. They use trade year 2015, i.e., democracy measured in 2014.
 
 ---
 
@@ -164,7 +172,7 @@ All paths are relative to `output/`.
 | Tables 6–7 | Appendix | Excluding each resolution category | `tables/appendix/regression_category_exclusion.tex` |
 | Table 8 | Appendix | PC2 regressed on trade, 2014 | `tables/appendix/pc2_trade_regression.tex` |
 
-**Formatting differs from the published version.** All estimates and numbers produced by the code are identical to those in the paper. Some captions and table formatting were edited by hand for publication, so the `.tex` files written by the code may differ from the published tables in wording and layout (but not in numbers). In the figures, the positions of country labels, and the node layout of the trade-network plot (Figure 1), are not fully reproducible and may differ from the published figures; the underlying data are the same.
+**Table formats can differ from the published version.** All estimates and numbers produced by the code are identical to those in the paper. Some captions and table formatting were edited by hand for publication, so the `.tex` files written by the code may differ from the published tables in wording and layout (but not in numbers). In the figures, the positions of country labels, and the node layout of the trade-network plot (Figure 1), may not be fully reproducible and differ from the published figures; the underlying data are the same.
 
 ---
 
@@ -189,4 +197,4 @@ How each variable in the models is built from the raw data. Timing is relative t
 
 ## 7. License
 
-[TODO: e.g., MIT for code; CC BY 4.0 for data we created. Third-party raw data remain under their original terms.]
+The code in this repository is released under the MIT License. Data we created are released under CC BY 4.0. Third-party raw data in `raw data/` remain under their original licenses, listed in Section 2.

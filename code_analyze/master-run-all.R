@@ -17,7 +17,6 @@ my_seed <- 50
 # 1. Source all function definitions -----------------------------------------
 
 # Data cleaning code
-source("../code_cleaning/sanity_check.R")
 source("../code_cleaning/1-DV-cleaning.R")
 source("../code_cleaning/2-IV-cleaning.R")
 source("../code_cleaning/3-DV-IV-merge-polish.R")
