@@ -5,6 +5,10 @@ output/
 # Large / restricted raw data (distributed via Dataverse or not at all)
 raw data/Trade-cepii-HS96/WTFC_HS96_Y*.csv
 *.dta
+!raw data/state_year_v4_extract.dta
+
+# Local run log
+run_log.txt
 
 # One-time IGO extract script (authors only; extraction described in README)
 code_cleaning/0-igo-extract.R
@@ -16,7 +20,3 @@ code_cleaning/0-igo-extract.R
 .Rproj.user/
 .DS_Store
 **/.DS_Store
-
-# TEMPORARY: once Jon Pevehouse approves redistribution, delete the line below
-# and add the exception  !raw data/state_year_v4_extract.dta  (*.dta above blocks it)
-raw data/state_year_v4_extract.dta

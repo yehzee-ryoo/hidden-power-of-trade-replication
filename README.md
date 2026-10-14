@@ -4,8 +4,8 @@ Replication code and data for:
 
 > Ryoo, Yehzee, Adeline Lo, and Keith Levin. "The Hidden Power of Trade: Trade Networks as Mediators for Democracy on Human Rights Voting." *Network Science*.
 
-- Dataverse: [TODO: DOI]
-- GitHub: [TODO: URL]
+- Dataverse: https://doi.org/10.7910/DVN/K5SIZI
+- GitHub: https://github.com/yehzee-ryoo/hidden-power-of-trade-replication
 - Contact: Yehzee Ryoo (yehzee.ryoo@wisc.edu)
 
 Running `code_analyze/master-run-all.R` rebuilds every figure, table, and counterfactual number reported in the paper (main text and appendix) from the raw data, and only those. The one exception is Figure 2 (the DAG), which was drawn by hand and is not produced by code. Intermediate files (cleaned data in `data/`, model estimates as `.rds` files in `output/estimates/`) are also saved, because the figures and tables are built from them.
@@ -64,8 +64,7 @@ Put all of these files in `raw data/` under the file names shown.
 
 - All files except the 19 CEPII trade files are in this GitHub repository and on Dataverse.
 - The CEPII trade files are too large for GitHub. Download them from the Dataverse record above and put them in `raw data/Trade-cepii-HS96/`.
-
-[TODO: IGO redistribution — waiting for permission from Jon Pevehouse. If permission is not granted, remove the file from the package and replace this note with instructions for requesting it.]
+- We use an advance, limited extract graciously provided by the authors of the Correlates of War (COW) project, covering only the three IGOs used in this analysis (WTO, EU, and OIC). Users interested in these data should refer to the official and most up-to-date releases from the COW project and use the full citation provided in the table below.
 
 **Data citations and terms of use.** If you use these data, please cite the original sources below. Each dataset is redistributed here under its own license.
 
