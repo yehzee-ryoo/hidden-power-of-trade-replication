@@ -55,7 +55,7 @@ Put all of these files in `raw data/` under the file names shown.
 | `un_votes.rds`, `un_roll_calls.rds`, `un_roll_call_issues.rds` | UNGA roll-call votes, resolution information (including `importantvote`), and issue codes | R package `unvotes` (https://github.com/dgrtwo/unvotes), built on Voeten's UNGA Voting Data (https://doi.org/10.7910/DVN/LEJUQZ) | `unvotes` 0.3.0; saved March 12, 2026 |
 | `vdem.rds` | V-Dem country-year data (`v2x_polyarchy`, `v2x_civlib`) | R package `vdemdata` (https://github.com/vdeminstitute/vdemdata) | V-Dem v15; saved March 12, 2026 |
 | `gdp.pop.rds` | GDP (`NY.GDP.MKTP.CD`) and population (`SP.POP.TOTL`), 1995–2024 | World Bank WDI, via R package `WDI` | `WDI` 2.7.9; saved March 12, 2026 |
-| `state_year_v4_extract.dta` | IGO membership (WTO, EU, OIC), country-year format, 1998–2016 | Correlates of War IGO data, version 4 (corrected), provided directly by the authors. Extracted from the full file (`state_year_v4_CORRECTED.dta`, not included): only `ccode`, `state`, `year`, `WTO`, `EU`, `OIC` for 1998–2016, values unchanged | Received January 9, 2026 |
+| `state_year_v4_extract.dta` | IGO membership (WTO, EU, OIC), country-year format, 1998–2016 | Correlates of War IGO data, version 4 (corrected), which we received from the dataset's authors. We include only the part we use: WTO, EU, and OIC membership for 1998–2016 (with `ccode`, `state`, `year`), copied as-is from their full file | Received January 9, 2026 |
 | `ucdp_dyadic_v25_1.csv` | Armed conflict dyads | UCDP Dyadic Dataset v25.1 (https://ucdp.uu.se/downloads/#dyadic) | v25.1; downloaded March 12, 2026 |
 | `Trade-cepii-HS96/WTFC_HS96_Y{2000..2018}_V202104.csv` (19 files, ~7.5 GB) | Bilateral trade flows, HS96 product level | CEPII World Trade Flows Characterization (WTFC) | V202104 |
 | `Trade-cepii-HS96/WTFC_country_codes_V202104.csv` | CEPII country code list | CEPII WTFC | V202104 |
@@ -67,23 +67,16 @@ Put all of these files in `raw data/` under the file names shown.
 
 [TODO: IGO redistribution — waiting for permission from Jon Pevehouse. If permission is not granted, remove the file from the package and replace this note with instructions for requesting it.]
 
-**Changes made in code (raw files are never edited).**
+**Data citations and terms of use.** If you use these data, please cite the original sources below. Each dataset is redistributed here under its own license.
 
-- *UN votes:* Yugoslavia after 1995 is recoded as Serbia (COW code 345). Votes are coded `vote_numeric` (yes = 1, abstain = 0.5, no = 0) and `vote_binary` (yes = 1, otherwise 0).
-- *IGO:* WTO observer status (3) is coded as non-member (0). Syria's OIC membership is set to 0 for 2012–2024 because of its suspension.
-- *UCDP:* Type 1/3 conflicts count as intrastate and type 2 as interstate. Type 1 (extrasystemic) has no cases after 1974, so it does not affect the 2000–2018 analysis. For type 4 conflicts, the host government counts as intrastate and foreign interveners as interstate. US vs. al-Qaeda (conflict 418) counts as interstate for the US. Conflicts are counted once per `conflict_id` per country-year.
-- *CEPII:* Antigua & Barbuda's ISO3 code is corrected from `ATA` to `ATG` in the country code file.
-
-**Data citations.**
-
-- Voeten, Erik, Anton Strezhnev, and Michael Bailey. United Nations General Assembly Voting Data. Harvard Dataverse. https://doi.org/10.7910/DVN/LEJUQZ
-- Coppedge, Michael, et al. 2025. "V-Dem Dataset v15." Varieties of Democracy (V-Dem) Project.
-- World Bank. World Development Indicators.
-- Pevehouse, Jon C. W., et al. Correlates of War Intergovernmental Organizations data, version 4 (corrected). Provided by Jon Pevehouse, January 9, 2026.
-- UCDP Dyadic Dataset version 25.1. Uppsala Conflict Data Program.
-- CEPII. World Trade Flows Characterization (WTFC) database, version 202104.
-
-[TODO: confirm full citations and the redistribution terms for each dataset, especially CEPII WTFC and the IGO file.]
+| Data | Please cite | License / terms |
+|---|---|---|
+| UN votes | Robinson, David. 2021. *unvotes: United Nations General Assembly Voting Data*. R package version 0.3.0. https://doi.org/10.32614/CRAN.package.unvotes. Underlying data: Voeten, Erik. *United Nations General Assembly Voting Data* (Harvard Dataverse record currently titled "United Nations General Assembly Ideal Points"). https://doi.org/10.7910/DVN/LEJUQZ | Package: MIT. Underlying data: CC0 1.0 |
+| V-Dem | Coppedge, Michael, et al. 2025. "V-Dem Dataset v15." Varieties of Democracy (V-Dem) Project. https://doi.org/10.23696/VDEMDS25. Accessed via Maerz, Seraphine, et al. 2025. *vdemdata* R package. https://github.com/vdeminstitute/vdemdata | CC BY-SA 4.0 |
+| GDP, population | World Bank. *World Development Indicators*. Accessed via Arel-Bundock, Vincent. *WDI: World Development Indicators and Other World Bank Data*. R package version 2.7.9. https://doi.org/10.32614/CRAN.package.WDI | CC BY 4.0 |
+| IGO membership | Fairley, Andrew, Jon Pevehouse, Jonas Tallberg, and Carl Vikberg. 2026. "The Correlates of War Intergovernmental Organizations Data, version 4.0." Manuscript, University of Wisconsin–Madison. | See the IGO note above |
+| Armed conflict | Harbom, Lotta, Erik Melander, and Peter Wallensteen. 2008. "Dyadic Dimensions of Armed Conflict, 1946–2007." *Journal of Peace Research* 45(5). Davies, Shawn, Therése Pettersson, Margareta Sollenberg, and Magnus Öberg. 2025. "Organized Violence 1989–2024." *Journal of Peace Research* 62(4). Gleditsch, Nils Petter, et al. 2002. "Armed Conflict 1946–2001: A New Dataset." *Journal of Peace Research* 39(5): 615–637. UCDP Dyadic Dataset version 25.1 (https://ucdp.uu.se/downloads/). | CC BY 4.0 |
+| Trade flows | Emlinger, Céline, and Sophie Piton. 2014. "World Trade Flows Characterization: Unit Values, Trade Types and Price Ranges." CEPII Working Paper 2014-26. Data: CEPII, World Trade Flows Characterization (WTFC), version 202104. | Etalab Open Licence 2.0 (reuse and redistribution allowed with attribution to CEPII and the date of the data version) |
 
 ---
 
@@ -176,6 +169,25 @@ All paths are relative to `output/`.
 
 ---
 
-## 6. License
+## 6. Variables
+
+How each variable in the models is built from the raw data. Timing is relative to the trade year *t*.
+
+| Variable in model | Role | Source | How it's coded |
+|---|---|---|---|
+| `vote_numeric` | Outcome | `unvotes` (resolutions tagged "Human rights") | yes = 1, abstain = 0.5, no = 0. Yugoslavia after 1995 is treated as Serbia. Measured at *t*+1. |
+| `vote_binary` | Outcome (robustness) | `unvotes` | yes = 1, otherwise 0 |
+| `importantvote` | Control (robustness) | `unvotes` roll-call data | As provided; available through vote year 2017 |
+| `rcid` | Fixed effect | `unvotes` | Resolution identifier |
+| `v2x_polyarchy` | Treatment (democracy) | V-Dem v15 | As provided; measured at *t*−1 |
+| `l.gdp_s`, `l.pop_s` | Controls | World Bank WDI | Logged, then standardized within each year; *t*−2 |
+| `HR_index_s` | Control | V-Dem `v2x_civlib` | Standardized within each year; *t*−2 |
+| `WTO`, `EU`, `OIC` | Controls | COW IGO v4 | 1 = full member, 0 = not a member. WTO observers count as non-members. Syria is coded as out of the OIC from 2012 (suspension). *t*−2 |
+| `interstate_/intrastate_conflicts_lag0/1` | Controls | UCDP Dyadic v25.1 | Count of distinct conflicts per country-year at *t*−2 (lag0) and *t*−3 (lag1). Types 1/3 count as intrastate and type 2 as interstate. In type 4, the host government counts as intrastate and foreign interveners as interstate, except US vs al-Qaeda, which counts as interstate. |
+| Trade network | Mediator | CEPII WTFC | Total bilateral export value summed over HS96 products, weighted by log(1 + value), at year *t*. CEPII countries are matched to our country list through their ISO 3166-1 three-letter codes (converted to country names with the `countrycode` R package). CEPII's country file gives Antigua & Barbuda the code ATA, which is Antarctica's ISO code; we change it to Antigua's ISO code, ATG, so that its trade flows are matched rather than dropped. |
+
+---
+
+## 7. License
 
 [TODO: e.g., MIT for code; CC BY 4.0 for data we created. Third-party raw data remain under their original terms.]
